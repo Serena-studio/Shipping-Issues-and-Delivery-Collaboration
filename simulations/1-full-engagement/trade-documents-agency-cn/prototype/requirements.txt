@@ -1,0 +1,8 @@
+# requirements.txt —— 项目依赖锁定清单（阶段1）
+# 安装命令：python -m pip install -r requirements.txt -i https://pypi.org/simple/
+fastapi==0.162.5        # Web 框架（指令指定，不许替换）
+uvicorn==0.54.0         # ASGI 服务器，用于启动 FastAPI
+pyyaml==6.0.3           # 读取 config.yaml（配置集中管理，符合代码规范）
+jinja2==3.1.6           # 模板渲染（阶段4 缺项清单页面用，阶段1 仅安装）
+httpx==0.28.1           # 测试用 HTTP 客户端（pytest 配合）
+pytest==9.2.0           # 测试框架
