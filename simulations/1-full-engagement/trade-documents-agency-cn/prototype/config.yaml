@@ -1,0 +1,85 @@
+# config.yaml —— 全局唯一配置文件（代码规范：禁止把密钥、模型地址写死在代码里）
+
+# ============ LLM 接入配置（OpenAI 兼容接口，阶段2 才实际调用） ============
+llm:
+  # 模型服务地址：占位符，部署时替换，不得写进代码
+  base_url: "https://YOUR-LLM-ENDPOINT/v1"
+  # 密钥：占位符，真实密钥通过环境变量 AGENT_LLM_KEY 覆盖，禁止提交真实值
+  api_key: "YOUR-API-KEY"
+  # 模型名：演练评分模型为 deepseek-flash，可配置替换
+  model: "deepseek-flash"
+  # 温度：定位与提示类任务需要稳定输出，取低温度
+  temperature: 0.1
+
+# ============ 存储配置 ============
+storage:
+  # SQLite 单文件路径（相对项目根目录；可被环境变量 AGENT_DB_PATH 覆盖以便测试隔离）
+  db_path: "data/agent.db"
+
+# ============ 关键字段白名单（数据红线 4：f31，缺失与未确认必须区分） ============
+field_whitelist:
+  - "商品编码"
+  - "数量"
+  - "单位"
+  - "金额"
+  - "币种"
+  - "版本"
+
+# 缺失值标记：源数据里缺字段时统一写这个值
+missing_marker: "缺失"
+# 未确认值标记：字段存在但语义待人工确认时写这个值（与缺失严格区分）
+unconfirmed_marker: "未确认"
+
+# ============ 五段业务链路节点（f01：客户提供→单证检查→人工确认→委托作业→归档） ============
+chain_nodes:
+  - "客户提供"
+  - "单证检查"
+  - "人工确认"
+  - "委托作业"
+  - "归档"
+
+# ============ 角色与权限表（f22/f41：模型无审批权，正式确认只归业务负责人） ============
+roles:
+  # 一线单证专员：可查询、可提交变更申请、不可确认放行
+  frontline:
+    display_name: "物流单证专员"
+    can_query: true          # 允许查询
+    can_submit_change: true  # 允许提交变更申请
+    can_confirm: false       # 禁止确认放行——为什么这么卡：f22 规定正式确认只归业务负责人
+  # 业务负责人：唯一正式确认人
+  owner:
+    display_name: "业务负责人"
+    can_query: true
+    can_submit_change: true
+    can_confirm: true        # 唯一允许 confirm=true 的角色（f22 硬约束）
+  # 审核与质量负责人：人工队列出口 + 审计查看
+  auditor:
+    display_name: "审核与质量负责人"
+    can_query: true
+    can_submit_change: false
+    can_confirm: false       # 审核角色管拦截与暂停，不做业务确认（职责分离）
+    can_manage_queue: true   # 允许处理人工队列（f44 人工队列出口）
+    can_view_audit: true     # 允许查看全部审计记录（f45）
+  # 流程协调员：只读 + 登记交接
+  coordinator:
+    display_name: "项目流程协调员"
+    can_query: true
+    can_submit_change: false
+    can_confirm: false
+  # 系统模型角色：只能产出建议，永远无审批权
+  model:
+    display_name: "系统智能体"
+    can_query: true
+    can_submit_change: false
+    can_confirm: false       # 为什么这么卡：f22 明文规定模型没有审批权限，写死为 false 不允许配置覆盖
+
+# ============ 数据红线开关（硬约束，默认即安全值） ============
+redlines:
+  read_only_source: true          # f32：只读脱敏导出，系统不提供任何写回接口
+  manual_queue_on_doubt: true     # f44：存疑一律进人工队列，禁止默认通过
+  auto_retry_disabled: true       # f35：不自动重试、不编造状态
+  dual_timestamp_required: true   # f34：业务发生时间与系统接收时间双时间戳
+  audit_full_trace: true          # f45：审计留痕不留摘要
+
+# ============ 输出页固定声明（数据红线 7） ============
+disclaimer: "合成演练 · 不代表真实授权、业务执行或客户验收"

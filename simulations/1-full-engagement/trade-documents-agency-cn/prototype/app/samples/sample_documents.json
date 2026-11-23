@@ -1,0 +1,96 @@
+{
+  "_说明": "合成演练样本 · 全部数据虚构 · 不代表真实授权、业务执行或客户验收。P2026-001 正常票；P2026-002 内置 f11 模拟异常（客户更新装箱数量但发票版本未同步）；P2026-003 内置 f10 字段不一致（商品名称/单位不一致）。payload 只含字段白名单六项（f31）。",
+  "packs": [
+    {
+      "pack_id": "P2026-001",
+      "handovers": [
+        {"node": "客户提供", "from_role": "客户", "to_role": "frontline", "version_no": "v1", "open_items": "", "deadline": "2026-11-20"},
+        {"node": "单证检查", "from_role": "frontline", "to_role": "owner", "version_no": "v1", "open_items": "金额币种二次核对", "deadline": "2026-11-22"}
+      ],
+      "documents": [
+        {
+          "doc_type": "invoice", "doc_no": "INV-2026-001", "source_file": "样本/发票-001.json",
+          "payload": {"商品编码": "8471.30", "数量": 10, "单位": "台", "金额": 5200.00, "币种": "USD", "版本": "v2"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 0, "confirm_state": "voided", "void_reason": "金额更正后作废", "business_time": "2026-11-01 09:00:00"},
+            {"version_no": "v2", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-03 14:30:00"}
+          ]
+        },
+        {
+          "doc_type": "packing_list", "doc_no": "PL-2026-001", "source_file": "样本/装箱单-001.json",
+          "payload": {"商品编码": "8471.30", "数量": 10, "单位": "台", "金额": 5200.00, "币种": "USD", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-02 10:00:00"}
+          ]
+        },
+        {
+          "doc_type": "order", "doc_no": "SO-2026-001", "source_file": "样本/订单-001.json",
+          "payload": {"商品编码": "8471.30", "数量": 10, "单位": "台", "金额": 5200.00, "币种": "USD", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-01 08:00:00"}
+          ]
+        }
+      ]
+    },
+    {
+      "pack_id": "P2026-002",
+      "handovers": [
+        {"node": "客户提供", "from_role": "客户", "to_role": "frontline", "version_no": "v2", "open_items": "发票版本未同步，需回查原始版本", "deadline": "2026-11-18"},
+        {"node": "单证检查", "from_role": "frontline", "to_role": "owner", "version_no": "v2", "open_items": "装箱数量与发票数量差异待人工确认", "deadline": "2026-11-19"}
+      ],
+      "documents": [
+        {
+          "doc_type": "invoice", "doc_no": "INV-2026-002", "source_file": "样本/发票-002.json",
+          "payload": {"商品编码": "8517.62", "数量": 50, "单位": "件", "金额": 12500.00, "币种": "USD", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-05 11:00:00"}
+          ]
+        },
+        {
+          "doc_type": "packing_list", "doc_no": "PL-2026-002", "source_file": "样本/装箱单-002.json",
+          "payload": {"商品编码": "8517.62", "数量": 60, "单位": "件", "金额": 12500.00, "币种": "USD", "版本": "v2"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 0, "confirm_state": "voided", "void_reason": "客户更新装箱数量，旧版作废", "business_time": "2026-11-05 11:00:00"},
+            {"version_no": "v2", "is_effective": 1, "confirm_state": "pending", "void_reason": null, "business_time": "2026-11-08 16:20:00"}
+          ]
+        },
+        {
+          "doc_type": "order", "doc_no": "SO-2026-002", "source_file": "样本/订单-002.json",
+          "payload": {"商品编码": "8517.62", "数量": 60, "单位": "件", "金额": 12500.00, "币种": "USD", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-05 09:30:00"}
+          ]
+        }
+      ]
+    },
+    {
+      "pack_id": "P2026-003",
+      "handovers": [
+        {"node": "单证检查", "from_role": "frontline", "to_role": "owner", "version_no": "v1", "open_items": "商品名称与单位不一致待定位", "deadline": "2026-11-25"}
+      ],
+      "documents": [
+        {
+          "doc_type": "invoice", "doc_no": "INV-2026-003", "source_file": "样本/发票-003.json",
+          "payload": {"商品编码": "6109.10", "数量": 200, "单位": "件", "金额": 3000.00, "币种": "CNY", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-09 10:00:00"}
+          ]
+        },
+        {
+          "doc_type": "packing_list", "doc_no": "PL-2026-003", "source_file": "样本/装箱单-003.json",
+          "payload": {"商品编码": "6109.10", "数量": 200, "单位": "打", "金额": 3000.00, "币种": "CNY", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "confirmed", "void_reason": null, "business_time": "2026-11-09 10:10:00"}
+          ]
+        },
+        {
+          "doc_type": "order", "doc_no": "SO-2026-003", "source_file": "样本/订单-003.json",
+          "payload": {"商品编码": "6109.10", "数量": 200, "单位": "件", "金额": 3000.00, "币种": "CNY", "版本": "v1"},
+          "versions": [
+            {"version_no": "v1", "is_effective": 1, "confirm_state": "pending", "void_reason": null, "business_time": "2026-11-09 09:00:00"}
+          ]
+        }
+      ]
+    }
+  ]
+}

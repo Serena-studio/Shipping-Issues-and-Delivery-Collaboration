@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>进出口代理单证一致性智能体系统 · 合成演练</title>
+  <meta name="description" content="定位与提示，不替代人工确认。一个只读、留痕、可追溯的进出口单证一致性智能体演练系统。">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <!-- ============ 顶部导航 ============ -->
+  <header class="topbar" id="top">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M6 9h20M6 16h14M6 23h17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="24" cy="16" r="3" fill="currentColor"/><circle cx="27" cy="23" r="2" fill="currentColor" opacity=".6"/></svg>
+        </span>
+        <span class="brand-text"><strong>单证一致性智能体</strong><small>合成演练 · 定位与提示系统</small></span>
+      </a>
+      <nav class="nav-links" aria-label="站内导航">
+        <a href="#chain">业务链路</a>
+        <a href="#demo">交互演示</a>
+        <a href="#redlines">数据红线</a>
+        <a href="#roles">权限矩阵</a>
+        <a href="#roadmap">路线图</a>
+      </nav>
+      <a class="nav-cta" href="#demo">打开演示台 <span aria-hidden="true">→</span></a>
+    </div>
+  </header>
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> 系统运行中 · FastAPI + SQLite 单文件</div>
+        <h1>让每一处单证差异<br><em>都能定位到原始字段</em></h1>
+        <p class="hero-lead">面向进出口代理单证业务的智能体演练系统。只做定位与提示，不审批、不放行、不覆盖原值——存疑一律进入人工队列，由授权人确认。</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#demo">进入交互演示 <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-ghost" href="#chain">了解系统边界</a>
+        </div>
+        <p class="disclaimer-inline">合成演练数据 · 不代表真实授权、业务执行或客户验收</p>
+      </div>
+      <div class="hero-panel">
+        <div class="panel-head">
+          <span class="panel-dot"></span><span class="panel-dot"></span><span class="panel-dot"></span>
+          <span class="panel-title">缺项清单 · 一页可逐行核对</span>
+        </div>
+        <div class="panel-body">
+          <div class="panel-row panel-row-head"><span>单证包</span><span>状态</span><span>值 / 来源</span></div>
+          <div class="panel-row"><span class="mono">P2026-002</span><span class="tag tag-warn">unconfirmed</span><span>装箱单 v2 · 有效但未确认</span></div>
+          <div class="panel-row"><span class="mono">P2026-003</span><span class="tag tag-bad">mismatch</span><span>单位「打」vs「件」· 来源：装箱单-003.json</span></div>
+          <div class="panel-row"><span class="mono">P2026-001</span><span class="tag tag-good">已核对</span><span>三份单证字段一致</span></div>
+          <div class="panel-foot">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2l2.3 5.2L18 8l-4 4 1 5.5-5-2.8-5 2.8 1-5.5-4-4 5.7-.8L10 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>每条结果都关联来源文件与人工复核记录，没有「通过 / 驳回」字段</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container stat-strip" id="statStrip">
+      <div class="stat"><span class="stat-value" data-stat="packs">—</span><span class="stat-label">单证包</span></div>
+      <div class="stat"><span class="stat-value" data-stat="documents">—</span><span class="stat-label">原始单证</span></div>
+      <div class="stat"><span class="stat-value" data-stat="versions">—</span><span class="stat-label">版本记录</span></div>
+      <div class="stat"><span class="stat-value" data-stat="handovers">—</span><span class="stat-label">交接记录</span></div>
+      <div class="stat"><span class="stat-value" data-stat="audit_logs">—</span><span class="stat-label">审计留痕</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 业务链路 ============ -->
+  <section class="section" id="chain">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="kicker">01 / 业务边界</span><h2>五段链路，只做「定位与提示」</h2></div>
+        <p>系统覆盖客户提供到归档的全链路，但把判断权留给人。人工确认、授权结论、版本复核只能由人完成。</p>
+      </div>
+      <div class="flow" id="flow">
+        <div class="flow-node"><span class="flow-num">1</span><strong>客户提供</strong><small>原始单证输入</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-node"><span class="flow-num">2</span><strong>单证检查</strong><small>字段一致性比对</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-node is-key"><span class="flow-num">3</span><strong>人工确认</strong><small>唯一确认人把关</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-node"><span class="flow-num">4</span><strong>委托作业</strong><small>交接四要素留痕</small></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-node"><span class="flow-num">5</span><strong>归档</strong><small>全量审计可回溯</small></div>
+      </div>
+      <div class="callout">
+        <span class="callout-icon" aria-hidden="true">i</span>
+        <div><strong>异常路径：存疑不默认通过</strong><p>版本未确认、字段不一致、差异未定位时，一律进入人工队列并暂停，出口为审核与质量负责人。系统没有写回接口，也不产生放行结论。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 交互演示台 ============ -->
+  <section class="section section-alt" id="demo">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="kicker">02 / 交互演示</span><h2>亲手验证只读查询与权限红线</h2></div>
+        <p>下面的按钮直接调用线上 FastAPI 接口。切换角色再查询，可以看到未登记角色被拒绝、每次成功查询都会写入审计。</p>
+      </div>
+
+      <div class="demo-grid">
+        <!-- 控制面板 -->
+        <div class="card control-card">
+          <div class="card-title"><span class="step-badge">A</span> 导入与查询</div>
+
+          <label class="field-label" for="actor">操作人</label>
+          <input id="actor" class="input" type="text" value="林亦舟" autocomplete="off">
+
+          <label class="field-label" for="roleKey">角色键</label>
+          <select id="roleKey" class="input">
+            <option value="frontline">frontline · 一线单证专员</option>
+            <option value="owner">owner · 业务负责人（唯一确认人）</option>
+            <option value="auditor">auditor · 审核与质量负责人</option>
+            <option value="coordinator">coordinator · 流程协调员</option>
+            <option value="model">model · 系统智能体（无审批权）</option>
+            <option value="hacker">hacker · 未登记角色（越权演示）</option>
+          </select>
+
+          <label class="field-label" for="packId">单证包编号</label>
+          <div class="input-row">
+            <input id="packId" class="input" type="text" value="P2026-002" autocomplete="off">
+            <button class="btn btn-primary btn-sm" id="btnQuery" type="button">查询</button>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-outline btn-sm" id="btnImport" type="button">导入合成样本</button>
+            <button class="btn btn-outline btn-sm" id="btnAudit" type="button">查看审计（仅 auditor）</button>
+          </div>
+
+          <div class="hint"><span class="hint-dot"></span> 导入接口幂等：重复调用只会跳过已存在的包，不会产生副本。</div>
+        </div>
+
+        <!-- 结果面板 -->
+        <div class="card result-card">
+          <div class="card-title"><span class="step-badge">B</span> 接口响应 <span class="endpoint" id="endpointLabel">等待请求…</span></div>
+          <div id="resultBox" class="result-box">
+            <div class="empty-state">
+              <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="10" width="32" height="28" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M15 19h18M15 25h12M15 31h15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <p>选择角色与单证包，点击「查询」查看真实接口返回</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <span>试试看</span>
+        用 <code>hacker</code> 角色查询 → 返回 <code>FORBIDDEN</code>；查询不存在的包 → 返回 <code>NOT_FOUND</code>；用 <code>auditor</code> 查看审计 → 看到完整留痕 JSON。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 数据红线 ============ -->
+  <section class="section" id="redlines">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="kicker">03 / 数据红线</span><h2>七条硬约束，全部落到代码</h2></div>
+        <p>每条红线都能追到现场事实编号（f00–f54），不是写在文档里的口号，而是启动即加载的配置与接口校验。</p>
+      </div>
+      <div class="redline-grid">
+        <article class="redline"><span class="rl-num">01</span><h3>只读边界</h3><p>只对接脱敏只读导出，无写回源系统接口。导入是单向的。</p><span class="rl-ref">f32</span></article>
+        <article class="redline"><span class="rl-num">02</span><h3>人工队列</h3><p>存疑一律入队并暂停，禁止默认通过、自动重试与编造状态。</p><span class="rl-ref">f44 / f35</span></article>
+        <article class="redline"><span class="rl-num">03</span><h3>双时间戳</h3><p>业务发生时间与系统接收时间分列存储，回填时间不能当发生时间。</p><span class="rl-ref">f34 / f13</span></article>
+        <article class="redline"><span class="rl-num">04</span><h3>字段口径</h3><p>只保留六项白名单字段，缺失与未确认严格区分，不混为一谈。</p><span class="rl-ref">f31</span></article>
+        <article class="redline"><span class="rl-num">05</span><h3>版本判定</h3><p>有效期 + 确认状态双条件，不按文件名猜版本，作废保留原因。</p><span class="rl-ref">f24</span></article>
+        <article class="redline"><span class="rl-num">06</span><h3>审计留痕</h3><p>谁查过、用哪版、什么建议、谁确认，detail 存完整 JSON 而非摘要。</p><span class="rl-ref">f45 / f43</span></article>
+        <article class="redline"><span class="rl-num">07</span><h3>数据性质</h3><p>所有输出固定携带合成演练声明；未定口径前不提供物理删除。</p><span class="rl-ref">简报 / f43</span></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 权限矩阵 ============ -->
+  <section class="section section-alt" id="roles">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="kicker">04 / 权限分层</span><h2>确认权只归业务负责人</h2></div>
+        <p>模型角色写死为无审批权，不允许配置覆盖；未知角色按最小权限处理，越权访问为零。</p>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="roleTable">
+          <thead><tr><th>角色键</th><th>显示名称</th><th>查询</th><th>提交变更</th><th>确认放行</th><th>管理队列</th><th>查看审计</th></tr></thead>
+          <tbody><tr><td colspan="7" class="loading-cell">正在从后端读取权限配置…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 路线图 ============ -->
+  <section class="section" id="roadmap">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="kicker">05 / 实施路线</span><h2>阶段交付与 MVP 能力地图</h2></div>
+        <p>阶段 1 已完成并通过 Harness 全量用例；后续阶段按「先立语义、再写逻辑」的顺序推进。</p>
+      </div>
+      <div class="stage-grid">
+        <article class="stage stage-done"><span class="stage-tag">已完成</span><h3>阶段 1 · 骨架</h3><p>配置、五类表、统一响应、只读导入器、3 个接口，6/6 用例通过。</p></article>
+        <article class="stage"><span class="stage-tag">规划中</span><h3>阶段 2 · 核心比对</h3><p>白名单校验、缺失/未确认区分、版本双条件、缺项清单与来源定位。</p></article>
+        <article class="stage"><span class="stage-tag">规划中</span><h3>阶段 3 · 流程红线</h3><p>人工队列流转、确认接口、双时间戳强制与过期拦截。</p></article>
+        <article class="stage"><span class="stage-tag">规划中</span><h3>阶段 4 · 审计验收</h3><p>审计检索、50 票验收脚本、缺项清单页面。</p></article>
+      </div>
+      <div class="capability">
+        <h3 class="cap-title">MVP 能力对照</h3>
+        <div class="cap-row"><span class="cap-name">FastAPI 接口</span><span class="cap-state yes">已实现</span><span class="cap-desc">/api/health · /api/import · /api/packs/{id}</span></div>
+        <div class="cap-row"><span class="cap-name">Harness 一键跑批</span><span class="cap-state yes">已实现</span><span class="cap-desc">环境自检 → pytest 全量 → 退出码汇总</span></div>
+        <div class="cap-row"><span class="cap-name">权限分层</span><span class="cap-state yes">已实现</span><span class="cap-desc">五角色权限矩阵，确认权唯一归属</span></div>
+        <div class="cap-row"><span class="cap-name">上线网站</span><span class="cap-state yes">已实现</span><span class="cap-desc">本站点与 API 同端口部署</span></div>
+        <div class="cap-row"><span class="cap-name">知识库 RAG / LLM / Wiki</span><span class="cap-state later">规划中</span><span class="cap-desc">需在业务口径与数据授权确认后接入，当前仅保留配置占位符</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>进出口代理单证一致性智能体系统</strong>
+        <p>合成演练 · 所有数据均为虚构样本，不代表真实授权、业务执行或客户验收。</p>
+      </div>
+      <div class="footer-meta">
+        <span>FastAPI 0.162.x · SQLite · PyYAML</span>
+        <span>接口文档 <a href="/docs" target="_blank" rel="noopener">/docs</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
